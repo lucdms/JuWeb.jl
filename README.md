@@ -33,18 +33,18 @@ Requirements:
 	
 NOTE: Any compatibility issues, or exceptions, remove the folders from the Julia libraries and try the above procedure again.
 		- On Windows:
-			"C:\Users\nomedousuario\.julia\v0.4"
-			"C:\Users\nomedousuario\.julia\lib\v0.4"
+			"C:\Users\username\.julia\v0.4"
+			"C:\Users\username\.julia\lib\v0.4"
+			or similar
 	
+- Just include the REPL:
 
-- Set the database directory in the file: config / constants.jl, more specifically the constant DB_FILE_NAME;
+Users:
+$> julia Pkg.clone("https://github.com/lucdms/JuWeb.jl.git")
+$> julia using JuWeb
 
-- After all this, just include the Run.jl file, located in JuWeb's main directory, for example:
 
-REPL:
-
-$> julia cd("C:\\Users\\lucianomelo\\Desktop\\workspace\\juweb")
-$> julia include("Run.jl")
+For developers it is advisable to clone the project "https://github.com/lucdms/JuWeb.jl.git" with the GIT program, in the "C:\Users\username\.julia\v0.4\JuWeb" repository.
 
 
 Acessar:
