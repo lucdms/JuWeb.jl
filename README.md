@@ -22,7 +22,6 @@ To configure and run the Polsar application on JuWeb, you must do the following:
 Requirements:
 - Install Julia-0.4.6;
 - Add Packages:
-
 	Pkg.add("HttpServer")
 	Pkg.add("Mustache")
 	Pkg.add("SQLite")
@@ -30,36 +29,41 @@ Requirements:
 	Pkg.add("ImageView")
 	Pkg.add("QuartzImageIO")
 	Pkg.add("ImageMagick")	
-	
+```
 NOTE: Any compatibility issues, or exceptions, remove the folders from the Julia libraries and try the above procedure again.
+```
 		- On Windows:
 			"C:\Users\username\.julia\v0.4"
 			"C:\Users\username\.julia\lib\v0.4"
 			or similar
-	
+```
+
 - Just include the REPL:
 
 For users:
+```
 $> julia Pkg.clone("https://github.com/lucdms/JuWeb.jl.git")
 $> julia using JuWeb
-
+```
 
 For developers:
+```
 It is advisable to clone the project "https://github.com/lucdms/JuWeb.jl.git" with the GIT program, in the "C:\Users\username\.julia\v0.4\JuWeb" (packages repository).
+```
 
 NOTE: Add the binaries that represent satellite images in the ".\JuWeb\src\Images" directory. We get this:
+```
 ".\JuWeb\src\Images\SanAnd_05508_10007_005_100114_L090HHHH_CX_01.mlc"
 ".\JuWeb\src\Images\SanAnd_05508_10007_005_100114_L090HVHV_CX_01.mlc"
 ".\JuWeb\src\Images\SanAnd_05508_10007_005_100114_L090VVVV_CX_01.mlc"
-
+```
 
 Then just access:
+```
 http://localhost:8000/polsar
 http://localhost:8000/post_example
 http://localhost:8000/tracks
 http://localhost:8000/tracks/4
-
-
 ```
 
 
