@@ -6,7 +6,7 @@ using HttpServer
 using SQLite
 
 #service layer
-include("../service/TrackService.jl")
+include(joinpath(SERVICE_PATH,"TrackService.jl"))
 
 type TrackController
 		

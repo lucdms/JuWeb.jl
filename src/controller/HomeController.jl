@@ -6,8 +6,9 @@ using SQLite
 using HttpCommon
 
 #service layer
-include("../service/TrackService.jl")
-include("../view/View.jl")
+include(joinpath(SERVICE_PATH,"TrackService.jl"))
+include(joinpath(VIEW_PATH,"View.jl"))
+
 
 type HomeController
 			
@@ -27,7 +28,7 @@ type HomeController
 			println("Acessing HomeController! Interface with views. Called index()")
 			#rendering a view
 			println("Rendering HomeView")
-			home_view=View("index-angular.html")
+			home_view = View("index-angular.html")
 			res.data = home_view.render()
 			println("Returning HomeView")
 			#returning a view
@@ -39,7 +40,7 @@ type HomeController
 			println("Acessing HomeController! Interface with views. Called post_example()")
 			#rendering a view
 			println("Rendering HomeView POST_EXAMPLE")
-			post_view=View("post_example.html")
+			post_view = View("post_example.html")
 			println("Returning HomeView POST_EXAMPLE")
 			res.data = post_view.render()
 			#returning a view

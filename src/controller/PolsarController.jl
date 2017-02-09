@@ -7,10 +7,11 @@ using ImageView, Images
 using FileIO, QuartzImageIO
 
 #service layer
-include("../view/View.jl")
-#include("../../ZoomScript.jl")
-include("../service/ImageService.jl")
 
+#include("../../ZoomScript.jl")
+include("../config/Constants.jl") #constants
+include(joinpath(VIEW_PATH,"View.jl"))
+include(joinpath(SERVICE_PATH,"ImageService.jl"))
 
 
 type PolsarController
@@ -38,7 +39,7 @@ type PolsarController
 			println("Acessing PolsarController! Interface with views. Called index()")
 			#rendering a view
 			println("Rendering PolsarView")
-			polsar_view=View("index-angular.html")
+			polsar_view = View("index-angular.html")
 			res.data = polsar_view.render()
 			println("Returning PolsarView")
 			#returning a view
@@ -57,10 +58,10 @@ type PolsarController
 			println(x)
 			z = split(req.resource,'/')[5]
 			println(z)
-			image_polsar_path = abspath("resources/img.png")
-			if ImageService().ZoomScript(abspath("Images/SanAnd_05508_10007_005_100114_L090HHHH_CX_01.mlc"),
-										 abspath("Images/SanAnd_05508_10007_005_100114_L090HVHV_CX_01.mlc"),
-										 abspath("Images/SanAnd_05508_10007_005_100114_L090VVVV_CX_01.mlc"),
+			image_polsar_path = joinpath(RESOURCE_PATH,"img.png")
+			if ImageService().ZoomScript(joinpath(IMAGE_PATH,"SanAnd_05508_10007_005_100114_L090HHHH_CX_01.mlc"),
+										 joinpath(IMAGE_PATH,"SanAnd_05508_10007_005_100114_L090HVHV_CX_01.mlc"),
+										 joinpath(IMAGE_PATH,"SanAnd_05508_10007_005_100114_L090VVVV_CX_01.mlc"),
 										 parse(Int, z),
 										 image_polsar_path) == true
 				
@@ -101,11 +102,11 @@ type PolsarController
 			yStart = parse(Int, split(req.resource,'/')[5])
 			yEnd = parse(Int, split(req.resource,'/')[6])
 			println(string(req.resource))
-			img_url = abspath("resources/imagem_cortada.png")
-			imgToCut = load(abspath("resources/img.png"))
+			img_url = joinpath(RESOURCE_PATH,"imagem_cortada.png")
+			imgToCut = load(joinpath(RESOURCE_PATH,"img.png"))
 			cutImg = subim(imgToCut, "x", xStart:xEnd, "y",yStart:yEnd)
 			saveimg_time = Images.save(img_url,convert(Image,cutImg))
-			image_polsar_path = abspath("resources/imagem_cortada.png")
+			image_polsar_path = joinpath(RESOURCE_PATH,"imagem_cortada.png")
 			#old
 			#file_response!(req, image_polsar_path, res)
 			#old
@@ -165,8 +166,8 @@ type PolsarController
 			
 			#cortar imagem
 			println("Cortando imagem...")
-			img_url = abspath("resources/imagem_cortada.png")
-			imgToCut = load(abspath("resources/img.png"))
+			img_url = joinpath(RESOURCE_PATH,"imagem_cortada.png")
+			imgToCut = load(joinpath(RESOURCE_PATH,"img.png"))
 			cuttedImg = subim(imgToCut, "x", xStart:xEnd, "y",yStart:yEnd)
 			
 
@@ -228,7 +229,7 @@ type PolsarController
 		
 		
 		function return_img()
-			image_polsar_path = abspath("resources/imagem_cortada.png")
+			image_polsar_path = joinpath(RESOURCE_PATH,"imagem_cortada.png")
 			file_response!(req, image_polsar_path, res)
 		end
 		

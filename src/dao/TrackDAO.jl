@@ -3,8 +3,12 @@
 # ============== #
 
 using SQLite
-include("../repo/Repository.jl")
-include("../model/TrackModel.jl")
+
+include("../config/Constants.jl") #constants
+
+
+include(joinpath(REPOSITORY_PATH,"Repository.jl"))
+include(joinpath(MODEL_PATH,"TrackModel.jl"))
 include("AbstractDAO.jl")
 
 

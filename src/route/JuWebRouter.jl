@@ -129,7 +129,7 @@ type JuWebRouter
 		
 		function file_path(resource::AbstractString)
 			#println(string("app","resources",resource[2:end]))
-			return string(abspath("resources",resource[2:end])) #file folder
+			return string(abspath("src","resources",resource[2:end])) #file folder
 		end
 		
 		

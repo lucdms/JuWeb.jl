@@ -1,5 +1,7 @@
 using Mustache
 
+include("../config/Constants.jl") #constants
+
 type View
 
 	template_name
@@ -12,7 +14,8 @@ type View
 		this = new()
 		
 		this.template_name = template_name
-		this.template_rendered = open(readall, abspath("resources",this.template_name)) #carregar view
+		#this.template_rendered = open(readall, abspath("src","resources",this.template_name)) #carregar view
+		this.template_rendered = open(readall, joinpath(RESOURCE_PATH,this.template_name)) #carregar view
 		
 		function render()
 			println("Acessing View Layer! Interface with controllers. Rendering with Mustache...")
