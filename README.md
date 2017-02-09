@@ -1,4 +1,5 @@
-![JUWEB LOGO](https://drive.google.com/file/d/0ByBvdsbTIBi_WkRSQUxkd3FJOUk/view?usp=sharing)
+![JUWEB LOGO](https://drive.google.com/file/d/0ByBvdsbTIBi_WkRSQUxkd3FJOUk/preview)
+
 https://drive.google.com/file/d/0ByBvdsbTIBi_WkRSQUxkd3FJOUk/view?usp=sharing
 
 # JuWeb v1.0
@@ -58,7 +59,7 @@ http://localhost:8000/tracks/4
 
 JuWeb Working:
 
-![JUWEB WORKING](https://lh5.googleusercontent.com/XE92nPQurEEojJK0FHjToQniDBrSZLd7k7oMec5g-7-0_27TfC2-DcaQ49fNmjRteX4j9dc3=w2560-h475-rw)
+![JUWEB WORKING](https://drive.google.com/file/d/0ByBvdsbTIBi_UVNqWDFJNGlUWk0/preview)
 
 https://drive.google.com/file/d/0ByBvdsbTIBi_UVNqWDFJNGlUWk0/view?usp=sharing
 
