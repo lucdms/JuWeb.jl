@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="image_algorithm">
+    <meta name="author" content="lucdms">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <title>PolSAR Service</title>
+	<style>
+		.formPolsar{
+		    background-color: #f3f3f3;
+		    border: solid 1px #a1a1a1;
+		    padding: 10px;
+		    width: 400px;
+		}
+
+		.imageDiv label, .imageDiv img{
+		    background-color: #f3f3f3;
+		    border: solid 1px #a1a1a1;
+		    padding: 10px;
+		    width: 400px;
+		}
+
+		.formPolsar label, .formPolsar input{
+		    display: block;
+		    width: 120px;
+		    float: left;
+		    margin-bottom: 10px;
+		}
+
+		.formPolsar label{
+		    text-align: right;
+		    padding-right: 20px;
+		}
+
+		br{
+		    clear: left;
+		}
+
+		body{
+		    background-color: white;
+		}
+
+
+		#left_side {
+		    float: left;
+		}
+
+		#center_s {
+		    margin-left: auto;
+		    margin-right: auto;
+		    width: 65px;
+		    background-color: #ccc;
+		}
+
+		#right_side {
+		    margin-left: 20px;
+		    margin-right: 20px;
+		    width: 65px;
+		    float: left;
+		}
+
+		.clear{
+		    clear:both;
+		}
+
+	</style>
+	    <script language="javascript">
+		function getURL(){
+		    var x = document.getElementById("x").value;
+		    var y = document.getElementById("y").value;
+		    var z = document.getElementById("z").value;
+		    var newURL ="/polsar/"+x+"/"+y+"/"+z;
+		    window.location.href = newURL;
+		}
+	    </script>
+</head>
+
+<body>
+    <H1>{{project_name}} - {{homepage_text}}</H1>
+    <div id="root">
+        <div class="formPolsar" id="left_side">
+            <label>Algorithm Method:</label>
+            <select>
+                <option value="PauliDecomposition">PauliDecomposition</option>
+                <option value="alg2">Alg2</option>
+                <option value="alg3">Alg3</option>
+                <option value="alg4">Alg4</option>
+            </select><br>
+            <label>X:</label>
+            <input id="x" name="x" value="{{size_x}}"><br>
+            <label>Y:</label>
+            <input id="y" name="y" value="{{size_y}}"><br>
+            <label>Z:</label>
+            <input id="z" name="z" value="{{size_z}}"><br>
+            <label>Execute:</label>
+            <input type="button" value="Gerar Imagem" onclick="getURL();" /><br>
+        </div>
+        <div class="imageDiv" id="right_side">
+           <label>Image:</label>
+            <!--<img src="/image" alt="Usa o REST de PolSAR Image" style="width:{{size_x}}px;height:{{size_y}}px;"><br> -->
+            <img src="/image" alt="Usa o REST de PolSAR Image" style="width:800px;height:400px;" id="scream"><br>
+        </div>
+    </div>
+    <div class="clear"></div>
+
+    <h1>corte da imagem</h1>
+	<div class="ck-button">
+            <label>
+                <input type="checkbox" id="btnROI" value="ROI"> <span>ROI</span>
+
+            </label>
+        </div>
+        <canvas id="SetupImageCanvas" width="900" height="200" style="border:1px solid #c3c3c3;">
+            Your browser does not support the HTML5 canvas tag.
+        </canvas>
+        <BR>
+        
+         <script type="text/javascript">
+	var oCanvas = document.getElementById("SetupImageCanvas");
+    	var o2DContext = oCanvas.getContext("2d");
+
+    	var img = document.getElementById("scream");
+
+	    // set default context states
+	    o2DContext.lineWidth = 1;
+	    o2DContext.translate(0.50, 0.50); // anti-aliasing trick for sharper lines
+	    o2DContext.drawImage(img, 0, 0);
+	    // vars to save user drawings
+	    var layers = [];
+	    var currentColor = "black";
+
+	    var mouseX;
+	    var mouseY;
+
+	    // vars for dragging
+	    var bDragging = false;
+	    var startX, startY;
+
+	    // vars for user-selected status
+	    var $roiCheckbox = document.getElementById("btnROI");
+	    var $layersCheckbox = false
+	    var $patches = 1;
+	    var roiIsChecked = false;
+	    var layersIsChecked = false;
+	    var patchCount = 0;
+
+	    // listen for mouse events
+	    oCanvas.addEventListener('mousedown', MouseDownEvent, false);
+	    oCanvas.addEventListener('mouseup', MouseUpEvent, false);
+	    oCanvas.addEventListener('mousemove', MouseMoveEvent, false);
+	    oCanvas.addEventListener('mouseout', MouseOutEvent, false);
+
+	    function MouseDownEvent(e) {
+		e.preventDefault();
+		startX = e.clientX - this.offsetLeft;
+		startY = e.clientY - this.offsetTop;
+		currentColor = randomColor();
+		getStatus();
+		bDragging = true;
+	    }
+
+	    function MouseUpEvent(e) {
+		if (!bDragging) {
+		    return;
+		}
+		e.preventDefault();
+		bDragging = false;
+		mouseX = e.clientX - this.offsetLeft;
+		mouseY = e.clientY - this.offsetTop;
+
+		var objeto = {x1: startX,
+		    y1: startY,
+		    x2: mouseX,
+		    y2: mouseY,
+		    color: currentColor,
+		    drawLayer: layersIsChecked,
+		    patchCount: patchCount
+		}
+
+		layers.push(objeto);
+		draw(objeto);
+		console.log("tou aqui");
+		console.log(layers);
+	    }
+
+	    function MouseOutEvent(e) {
+		MouseUpEvent(e);
+	    }
+
+	    function MouseMoveEvent(e) {
+		if (!bDragging) {
+		    return;
+		}
+
+		mouseX = e.clientX - this.offsetLeft;
+		mouseY = e.clientY - this.offsetTop;
+	       
+	       // draw(tempLayer);
+	    }
+
+
+	    function draw(layer) {
+		if (layer.drawLayer) {
+	
+		    // set context state
+		    o2DContext.lineWidth = 0.50;
+		    o2DContext.strokeStyle = layer.color;
+
+		    // draw parallel lines
+		    hline(layer.y1);
+		    hline(layer.y2);
+		}
+		if (layer.patchCount > 0) {
+	
+		    // set context state
+		    o2DContext.lineWidth = 1.5;
+		    o2DContext.strokeStyle = '#0F0';
+
+		    // draw regions
+		    o2DContext.strokeRect(layer.x1, (-layer.y1), (layer.x2 - layer.x1), (-(layer.y2 - layer.y1)));
+			//o2DContext.strokeRect(0,0 , 50, 50);
+		    var w = layer.x2 - layer.x1;
+		    o2DContext.beginPath();
+		    o2DContext.stroke();
+		}
+	    }
+	    function getStatus() {
+		roiIsChecked = $roiCheckbox.checked;
+		layersIsChecked = false;
+		patchCount = $patches;
+		if (!roiIsChecked || !patchCount) {
+		    patchCount = 0;
+		}
+	    }
+
+	    function randomColor() {
+		return ('#' + Math.floor(Math.random() * 16777215).toString(16));
+	    }
+
+	    function hline(y) {
+		o2DContext.beginPath();
+		o2DContext.moveTo(0, y);
+		o2DContext.lineTo(oCanvas.width, y);
+		o2DContext.stroke();
+	    }
+		</script>
+		
+
+	</body>
+
+</html>

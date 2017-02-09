@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html ng-app="appController" ng-controller="indexController">
+	 <head>
+		 <title>huge polsar</title>
+		 <link rel="stylesheet" href="/css/bootstrap.min.css">
+		 <link rel="stylesheet" href="/css/style.css">
+		<meta charset="utf-8">
+	 </head>
+	 <body>
+		<div class="container">
+			<nav class="navbar navbar-inverse set-color">
+				<ul class="list-navbar">
+					<li>UFAL</li>
+					<li>lucdms@gmail.com</li>
+				</ul>
+			</nav>
+		</div>
+		<div class="container">
+			<h1>HUGE POLSAR</h1>
+
+			<img id="canvasBackground" src="/image/1/2/10" style="display:none;"/>
+
+			<canvas id="myCanvas" width="" height="" style="">
+					Your browser does not support the HTML5 canvas tag.
+			</canvas><BR>
+
+			<div id="imagem-cortada">
+				<h2>Imagem cortada</h2>
+			</div>
+
+			<input type="text" name="txtPatchCount" id="txtPatchCount" value="0" size="1px">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="form-controll">
+						<label>
+							<input type="checkbox" id="btnROI" value="ROI" checked>
+							<span>ROI</span>
+						</label>
+					</div>
+					<div class="ck-button">
+						<label>
+						   <input type="checkbox" id="btnLAYER" value="LAYER">
+						   <span>LAYER</span>
+						</label>
+					</div>
+					<div id="MouseCoords"></div>
+					<div id="ROICoordsRef"></div>
+					<div id="ROICoordsAbs"></div>
+
+
+					<div class="form-group">
+						<label>Summary size</label>
+						<input type="text" class="form-control" name="summary-size" ng-model="summarySize" ng-init="summarySize = 250"/>
+					</div>
+					<div class="form-group">
+						<label>Select Algorithm:</label>
+						<select name="selectedAlgorithm" class="form-control" ng-model="selectedAlgorithm">
+							<option value="" disabled="disabled">Choose an option...</option>
+							<option value="pauli">Pauli (not working)</option>
+							<option value="convolucao">Convolução (not working)</option>
+							<option value="pointdetector">PointDetector (not working)</option>
+							<option value="grayscale">GrayScale</option>
+							<option value="blur">Blur</option>
+							<option value="dilate">Dilate</option>
+							<option value="erode">Erode</option>
+							<option value="bilinear_interpolation">Bilinear Interpolation (not working)</option>	
+							<option value="morpholaplace">Morphological Laplacian</option>	
+							<option value="morphogradient">Morphological Gradient</option>	
+							<option value="tophat">Morphological Top-hat</option>	
+							<option value="opening">Opening</option>	
+							<option value="closing">Closing</option>	
+							<option value="saltpeppernoise">SaltPepperNoise (not working)</option>
+						</select>
+					</div>
+					<button class="btn btn-primary" ng-click="generateImage()">Gerar o corte da imagem</button><br>
+				</div>
+			</div>
+		</div>
+		<script src="/js/angular.min.js"></script>
+		<script src="/js/app.js"></script>
+		<script src="/js/indexControler.js"></script>		
+	 </body>
+</html>

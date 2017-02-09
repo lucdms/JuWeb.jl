@@ -1,0 +1,23 @@
+.list-navbar li{
+  color: white;
+  font-size: 24px;
+  display: inline;
+  padding: 10px;
+  margin-right: 5px;
+}
+
+.list-navbar{
+  padding-left:10px;
+}
+
+.set-color{
+  background-color: #6A0C90;
+}
+
+h1,label{
+color: #6A0C90;
+}
+
+body{
+  background-color: #FEFCFC;
+}

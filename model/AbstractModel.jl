@@ -1,0 +1,2 @@
+abstract AbstractModel
+export AbstractModel

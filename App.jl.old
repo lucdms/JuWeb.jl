@@ -1,0 +1,135 @@
+# ============== #
+#   App+Server   #
+# ============== #
+
+module App
+
+
+using HttpServer
+using Mustache
+using JSON
+using ImageView, Images 
+using FileIO, QuartzImageIO
+
+#include("../ZoomScript.jl")
+include("utils/Http_utils.jl") #utils
+include("config/Constants.jl") #constants
+include("repo/Repository.jl") #repository, daos
+include("model/TrackModel.jl") #models
+include("controller/TrackController.jl") #controller
+include("route/Router.jl") #routes
+
+
+
+
+#obj controller
+#Controller 1
+#controller = Controller()
+#println(typeof(controller.index))
+
+#println("1.9")
+router = Router()
+#println("2.0")
+#router.register_controller("/teste", controller.index)
+#println("2.1")
+##
+
+
+
+#TODO adicionar mais Functions, possibilidades de inserção de funções
+#include("../controller/TrackController.jl")
+#Controller 2 (tracks)
+track_controller = TrackController()
+router.register_controller("/api/db/tables",track_controller.index)
+##
+ 
+
+type Application
+
+	handler_request::Function
+
+	function Application()
+		
+		this = new()
+	
+		#handle request (recebimento das requisições via URL)
+		function handler_request(req::Request, res::Response)
+			println(string("#Handle request recebeu a requisição via URL: ",req))
+			
+			#tentativa de chamar o callback da URL invokada, retorna a Response desejada
+			route_method = router.go_route(req, res) #retorna a Function da "rota" buscada
+			
+			return route_method	
+		end
+		
+		#set methods
+		this.handler_request = handler_request
+		
+		return this
+		
+	end
+		
+end
+
+
+
+
+type ApplicationServer
+		
+	application::Application
+	host::AbstractString
+	port::Int
+	
+	start::Function
+	
+	
+	function ApplicationServer(application, host="localhost",port=8000)
+		
+		this = new()
+		
+		this.application = application
+		this.host = host
+		this.port = port
+		
+		function start()
+		  #http = HttpHandler((req, res)-> handler(b,req,res))
+		  http = HttpHandler((req, res)-> application.handler_request(req,res)) #seta a application handler
+		  http.events["error"]  = (client, error) -> println(error)
+		  http.events["listen"] = (port)          -> println("Listening on $port...")
+		  if host=="localhost"
+			host="127.0.0.1"
+		  end
+		  try
+			IPv4(host)
+			#@async run(server, host=IPv4(host), port=port)
+			run(Server(http), host=IPv4(host), port=port)
+		  catch
+			"only IPv4 addresses"
+		  end
+		end
+		
+		this.start = start
+	
+		return this
+	
+	end
+		
+end
+
+
+
+#start
+
+app = Application()
+
+server = ApplicationServer(app,"localhost",8000)
+#Server.start()
+server.start()
+
+
+
+#server = Server((req, res) -> app(req))
+#run(server, 8000)
+
+
+end #module

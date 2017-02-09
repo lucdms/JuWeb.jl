@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="image_algorithm">
+    <meta name="author" content="lucdms">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <title>PolSAR Service</title>
+	<style>
+		body{background-color:red;}
+	</style>
+    <script language="javascript">
+        function getURL(){
+            var x = document.getElementById("x").value;
+            var y = document.getElementById("y").value;
+            var z = document.getElementById("z").value;
+            var newURL ="/polsar/"+x+"/"+y+"/"+z;
+            window.location.href = newURL;
+        }
+    </script>
+</head>
+
+<body>
+    <H1>{{project_name}} - {{homepage_text}}</H1>
+    <div id="root">
+        <div class="formPolsar" id="left_side">
+            <label>Algorithm Method:</label>
+            <select>
+                <option value="PauliDecomposition">PauliDecomposition</option>
+                <option value="alg2">Alg2</option>
+                <option value="alg3">Alg3</option>
+                <option value="alg4">Alg4</option>
+            </select><br>
+            <label>X:</label>
+            <input id="x" name="x" value="{{size_x}}"><br>
+            <label>Y:</label>
+            <input id="y" name="y" value="{{size_y}}"><br>
+            <label>Z:</label>
+            <input id="z" name="z" value="{{size_z}}"><br>
+            <label>Execute:</label>
+            <input type="button" value="Gerar Imagem" onclick="getURL();" /><br>
+        </div>
+        <div class="imageDiv" id="right_side">
+           <label>Image:</label>
+            <!--<img src="/image" alt="Usa o REST de PolSAR Image" style="width:{{size_x}}px;height:{{size_y}}px;"><br> -->
+            <img src="/image" alt="Usa o REST de PolSAR Image" style="width:800px;height:400px;"><br>
+        </div>
+    </div>
+    <div class="clear"></div>
+
+    <h1>corte da imagem</h1>
+        <canvas id="SetupImageCanvas" width="900" height="750" style="border:1px solid #c3c3c3;" style="background: url('img.png');">
+            Your browser does not support the HTML5 canvas tag.
+        </canvas>
+        <BR>
+        <div class="ck-button">
+            <label>
+                <input type="checkbox" id="btnROI" value="ROI"> <span>ROI</span>
+
+            </label>
+        </div>
+         <script type="text/javascript" src="../js/captura-de-coordenadas.js"></script>
+
+</body>
+
+</html>
