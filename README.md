@@ -70,7 +70,8 @@ This is the folder/directory that the images should be:
 ```
 
 Follow the image of JuWeb by downloading images automatically:
- ![JUWEB DOWNLOADING](https://scontent-gru2-1.xx.fbcdn.net/v/t1.0-9/16683850_1267419506668986_2113012886235174301_n.jpg?oh=9737bcdbda245c4bd5e0bde581b0081f&oe=5941B9F8)
+
+ ![JUWEB DOWNLOADING](https://scontent-gru2-1.xx.fbcdn.net/v/t1.0-9/16681761_1267442713333332_2627546624307731990_n.jpg?oh=ba4402613070f687eb9423ad0860a70d&oe=59396DDD)
 
 
 Then just access:
