@@ -24,6 +24,7 @@ Requirements:
 - Add Packages:
 	Pkg.add("HttpServer")
 	Pkg.add("Mustache")
+	Pkg.add("Requests")
 	Pkg.add("SQLite")
 	Pkg.add("JSON")
 	Pkg.add("ImageView")
@@ -48,15 +49,29 @@ $> julia using JuWeb
 
 For developers:
 ```
-It is advisable to clone the project "https://github.com/lucdms/JuWeb.jl.git" with the GIT program, in the "C:\Users\username\.julia\v0.4\JuWeb" (packages repository).
+It is advisable to clone the project "https://github.com/lucdms/JuWeb.jl.git" with the GIT program, 
+in the "C:\Users\username\.julia\v0.4\JuWeb" (packages repository).
 ```
 
-NOTE: Add the binaries that represent satellite images in the ".\JuWeb\src\Images" directory. We get this:
+NOTE: JuWeb has already been programmed to download the binaries of the necessary images automatically to the project root, 
+however, this may be more time-consuming than downloading it directly from the links (below). Therefore, you have both options 
+to download, being at your discretion the choice of how to download.
+```
+https://bitbucket.org/lucdms/juweb_images/raw/6ff0874260fea6b13ede7572b08f14ad178140a3/Images/SanAnd_05508_10007_005_100114_L090HHHH_CX_01.mlc
+https://bitbucket.org/lucdms/juweb_images/raw/6ff0874260fea6b13ede7572b08f14ad178140a3/Images/SanAnd_05508_10007_005_100114_L090HVHV_CX_01.mlc
+https://bitbucket.org/lucdms/juweb_images/raw/6ff0874260fea6b13ede7572b08f14ad178140a3/Images/SanAnd_05508_10007_005_100114_L090VVVV_CX_01.mlc
+```
+
+This is the folder/directory that the images should be:
 ```
 ".\JuWeb\src\Images\SanAnd_05508_10007_005_100114_L090HHHH_CX_01.mlc"
 ".\JuWeb\src\Images\SanAnd_05508_10007_005_100114_L090HVHV_CX_01.mlc"
 ".\JuWeb\src\Images\SanAnd_05508_10007_005_100114_L090VVVV_CX_01.mlc"
 ```
+
+Follow the image of JuWeb by downloading images automatically:
+ ![JUWEB DOWNLOADING](https://scontent-gru2-1.xx.fbcdn.net/v/t1.0-9/16683850_1267419506668986_2113012886235174301_n.jpg?oh=9737bcdbda245c4bd5e0bde581b0081f&oe=5941B9F8)
+
 
 Then just access:
 ```
@@ -78,3 +93,4 @@ Thank you.
 
 Luciano Melo.
 lucdms@gmail.com
+
