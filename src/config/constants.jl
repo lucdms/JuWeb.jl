@@ -9,6 +9,5 @@ CONTROLLER_PATH = joinpath(JUWEB_PATH,"src/controller")
 SERVICE_PATH = joinpath(JUWEB_PATH,"src/service")
 MODEL_PATH = joinpath(JUWEB_PATH,"src/model")
 VIEW_PATH = joinpath(JUWEB_PATH,"src/view")
-
 IMAGE_PATH = joinpath(JUWEB_PATH,"src/Images")
 
