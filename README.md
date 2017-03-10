@@ -30,6 +30,8 @@ Requirements:
 	Pkg.add("ImageView")
 	Pkg.add("QuartzImageIO")
 	Pkg.add("ImageMagick")	
+	
+On UNIX: You need to install the cmake command for the platform.
 ```
 NOTE: Any compatibility issues, or exceptions, remove the folders from the Julia libraries and try the above procedure again.
 ```
