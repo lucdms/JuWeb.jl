@@ -20,7 +20,7 @@ Juweb is a Web Framework that uses MVC paradigm, whose purpose is the promotion 
 To configure and run the Polsar application on JuWeb, you must do the following:
 ```julia
 Requirements:
-- Install Julia-0.4.6;
+- Install Julia-0.4.7;
 - Add Packages:
 	Pkg.add("HttpServer")
 	Pkg.add("Mustache")
