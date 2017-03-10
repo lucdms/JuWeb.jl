@@ -32,6 +32,16 @@ Requirements:
 	Pkg.add("ImageMagick")	
 	
 On UNIX: You need to install the cmake command for the platform.
+	Installation by a PPA (Upgrade to 3.2)
+		sudo apt-get install software-properties-common
+		sudo add-apt-repository ppa:george-edison55/cmake-3.x
+		sudo apt-get update
+	
+	When cmake is not yet installed:
+		sudo apt-get install cmake
+	
+	When cmake is already installed:
+		sudo apt-get upgrade
 ```
 NOTE: Any compatibility issues, or exceptions, remove the folders from the Julia libraries and try the above procedure again.
 ```
