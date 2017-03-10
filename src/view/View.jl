@@ -1,6 +1,6 @@
 using Mustache
 
-include("../config/Constants.jl") #constants
+include("../config/constants.jl") #constants
 
 type View
 

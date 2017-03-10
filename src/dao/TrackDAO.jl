@@ -4,7 +4,7 @@
 
 using SQLite
 
-include("../config/Constants.jl") #constants
+include("../config/constants.jl") #constants
 
 
 include(joinpath(REPOSITORY_PATH,"Repository.jl"))

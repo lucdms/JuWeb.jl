@@ -9,7 +9,7 @@ using FileIO, QuartzImageIO
 #service layer
 
 #include("../../ZoomScript.jl")
-include("../config/Constants.jl") #constants
+include("../config/constants.jl") #constants
 include(joinpath(VIEW_PATH,"View.jl"))
 include(joinpath(SERVICE_PATH,"ImageService.jl"))
 

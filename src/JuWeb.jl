@@ -6,7 +6,7 @@ module JuWeb
 
 using HttpServer, Mustache, Requests
 
-include("config/Constants.jl") #constants
+include("config/constants.jl") #constants
 
 print_with_color(:yellow,"    _                   _ \n")
 print_with_color(:yellow,"   | |_ _  __ __  ____ | |__\n")
