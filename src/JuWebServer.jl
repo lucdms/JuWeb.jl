@@ -2,7 +2,7 @@
 #   JuWebServer   #
 # =============== #
 
-#using HttpServer
+export JuWebServer
 
 type JuWebServer
 		
@@ -11,6 +11,7 @@ type JuWebServer
 	port::Int
 	
 	run::Function
+	info::Function
 	
 	
 	function JuWebServer(application, host="localhost",port=8000)
@@ -21,12 +22,10 @@ type JuWebServer
 		this.host = host
 		this.port = port
 		
-		
 		function run()
-		  #http = HttpHandler((req, res)-> handler(b,req,res))
 		  http = HttpHandler((req, res)-> application.handler_request(req,res)) #seta a application handler
 		  http.events["error"]  = (client, error) -> println(error)
-		  http.events["listen"] = (port)          -> println("Listening on $port...")
+		  http.events["listen"] = (port)          -> print_with_color(:yellow,"Listening on $port...\n")
 		  if host=="localhost"
 			host="127.0.0.1"
 		  end
@@ -40,8 +39,15 @@ type JuWebServer
 		end
 		
 		
+		
+		function info()
+			return string(this.application, " ", this.host, " ", this.port)
+		end
+		
+				
 		this.run = run
-	
+		this.info = info
+		
 		
 		return this
 	

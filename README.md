@@ -20,8 +20,8 @@ Juweb is a Web Framework that uses MVC paradigm, whose purpose is the promotion 
 To configure and run the Polsar application on JuWeb, you must do the following:
 ```julia
 Requirements:
-- Install Julia-0.4.7;
-- Add Packages:
+- Julia-0.4.7;
+- Packages:
 	Pkg.add("HttpServer")
 	Pkg.add("Mustache")
 	Pkg.add("Requests")
@@ -58,7 +58,6 @@ NOTE: Any compatibility issues, or exceptions, remove the folders from the Julia
 For users:
 ```julia
 Pkg.clone("https://github.com/lucdms/JuWeb.jl.git")
-push!(LOAD_PATH, Base.LOAD_CACHE_PATH[1])
 using JuWeb
 ```
 
@@ -113,13 +112,12 @@ include(joinpath(VIEW_PATH,"View.jl"))
 
 type MyController
 
-	#methods
 	index::Function
 	sum::Function
 	mult_index::Function
 	mult_action::Function
 	
-	#constructor
+	
 	function MyController()
 		
 		this = new()
@@ -172,11 +170,12 @@ type MyController
 			return string(mult)
 		end
 		
-		#set methods
+		
 		this.index = index	
 		this.sum = sum
 		this.mult_index = mult_index
 		this.mult_action = mult_action
+		
 		
 		return this
 		
@@ -187,21 +186,21 @@ end
 
 ### Routes
 
-In "./JuWeb/src/route/routes.jl" add the code:
+In "./JuWeb/src/route/JuWebRouteMapper.jl" add the code:
 
 ```julia
 include(joinpath(CONTROLLER_PATH,"MyController.jl"))
 my_controller = MyController()
 
 #mycontroller index page
-router.register_controller(GET,"/mycontroller\$",my_controller.index)
+router.register_controller(GET,"/mycontroller(\/)?\$",my_controller.index)
 
 #mycontroller sum service route
 router.register_controller(GET,"/mycontroller/sum\\?([\\w-]+(=[\\w-]*)?(&[\\w-]+(=[\\w-]*)?)*)?\$", my_controller.sum)
 
 #mycontroller mult service route
-router.register_controller(GET,"/mycontroller/mult\$",my_controller.mult_index)
-router.register_controller(POST,"/mycontroller/mult_action\$",my_controller.mult_action)
+router.register_controller(GET,"/mycontroller/mult(\/)?\$",my_controller.mult_index)
+router.register_controller(POST,"/mycontroller/mult_action(\/)?\$",my_controller.mult_action)
 ```
 
 

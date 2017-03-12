@@ -6,134 +6,118 @@ using SQLite
 using ImageView, Images 
 using FileIO, QuartzImageIO
 
-#service layer
 
-#include("../../ZoomScript.jl")
 include("../config/constants.jl") #constants
 include(joinpath(VIEW_PATH,"View.jl"))
 include(joinpath(SERVICE_PATH,"ImageService.jl"))
 
 
+#PolsarController, interface with views and users
 type PolsarController
-		
-	#track_service::TrackService #service
-		
+				
+	
 	#methods
 	index::Function
-	image::Function
-	img_cut::Function
-	return_img::Function
+	main_image::Function
 	generate_image::Function
+	img_cut::Function
+
 	
-	
-	
-	#construtor
+	#constructor
 	function PolsarController()
 		
-		this = new()
-		#this.track_service = TrackService()
-		
-		println("criado PolsarController")	
+		this = new()		
 		
 		function index(req::Request,res::Response)
-			println("Acessing PolsarController! Interface with views. Called index()")
 			#rendering a view
 			println("Rendering PolsarView")
 			polsar_view = View("index-angular.html")
 			res.data = polsar_view.render()
 			println("Returning PolsarView")
-			#returning a view
 			return res
 		end
 		
 		
-		function image(req::Request,res::Response)
-			#(ismatch(r"^",req.resource))
-			
-			println("testeeeeea")
-			println(req.resource)
-			
-			
-			x = split(req.resource,'/')[3]
-			println(x)
-			z = split(req.resource,'/')[5]
-			println(z)
-			image_polsar_path = joinpath(RESOURCE_PATH,"img.png")
+		function main_image(req::Request,res::Response)			
+			println("generate main image...")
+			url = req.resource
+			query_string_params = url[search(url, '?')+1 : end] #substring indice inicial, final
+			params::Dict{AbstractString,AbstractString}
+			params = HttpCommon.parsequerystring(query_string_params) #cria Dict com os params separados. ParÂmetros que foram passados pela URL
+			#params
+			for (n, f) in enumerate(params)
+				println(string(n," => ",f))
+			end
+			x = get(params, "x", "1") #terceiro param é o default value
+			y = get(params, "y", "2") #terceiro param é o default value
+			z = get(params, "z", "10") #terceiro param é o default value			
+			main_image_polsar_path = joinpath(RESOURCE_PATH,"img.png")
+			#generate png from binary satellites images and send to home
 			if ImageService().ZoomScript(joinpath(IMAGE_PATH,"SanAnd_05508_10007_005_100114_L090HHHH_CX_01.mlc"),
 										 joinpath(IMAGE_PATH,"SanAnd_05508_10007_005_100114_L090HVHV_CX_01.mlc"),
 										 joinpath(IMAGE_PATH,"SanAnd_05508_10007_005_100114_L090VVVV_CX_01.mlc"),
 										 parse(Int, z),
-										 image_polsar_path) == true
+										 main_image_polsar_path) == true
 				
-				#file_response!(req, image_polsar_path, res)
-				res.headers = file_headers(image_polsar_path)
+				
 				res.status = 200
-				res.data = open(read, image_polsar_path)
-				return res
+				res.data = open(read, main_image_polsar_path)
+				res.headers = Dict( "Server"     => "Julia/$VERSION",
+								  "Content-Type" => "image/png",
+								  "Date"         => Dates.format(now(Dates.UTC), Dates.RFC1123Format) )
+				return res	
 				
 			end
 		end
 		
-		
-		
-		
-		
-		#TODO adicionar métodos nos utils
-		function serve_static_file(req::Request, res::Response)
-		  f = file_path(req.resource)
-		  res.status = 200
-		  res.headers = file_headers(f)
-		  res.data = open(read, f)
-		  return res
-     	end
-		file_extension(f) = ormatch(match(r"(?<=\.)[^\.\\/]*$", f), "")
-		file_headers(f) = Dict{AbstractString, AbstractString}("Content-Type" => get(mimetypes, file_extension(f), "application/octet-stream"))
-		ormatch(r::RegexMatch, x) = r.match
-		ormatch(r::Void, x) = x
-		#TODO adicionar métodos nos utils
 
-		
-		
-		
 		function img_cut(req::Request,res::Response)
 			#valores via url
-			xStart = parse(Int, split(req.resource,'/')[3])
-			xEnd = parse(Int,split(req.resource,'/')[4])
-			yStart = parse(Int, split(req.resource,'/')[5])
-			yEnd = parse(Int, split(req.resource,'/')[6])
+			url = req.resource
+			query_string_params = url[search(url, '?')+1 : end] #substring indice inicial, final
+			params::Dict{AbstractString,AbstractString}
+			params = HttpCommon.parsequerystring(query_string_params) #cria Dict com os params separados. ParÂmetros que foram passados pela URL
+			#params
+			for (n, f) in enumerate(params)
+				println(string(n," => ",f))
+			end
+			xStart = get(params, "xStart", "1") #terceiro param é o default value
+			xEnd = get(params, "xEnd", "2") #terceiro param é o default value
+			yStart = get(params, "yStart", "10") #terceiro param é o default value			
+			yEnd = get(params, "yEnd", "10") #terceiro param é o default value			
+			#parse to int	
+			xStart = try parse(Int, xStart) end
+			xEnd = try parse(Int, xEnd) end
+			yStart = try parse(Int, yStart) end
+			yEnd = try parse(Int, yEnd) end	
 			println(string(req.resource))
 			img_url = joinpath(RESOURCE_PATH,"imagem_cortada.png")
 			imgToCut = load(joinpath(RESOURCE_PATH,"img.png"))
 			cutImg = subim(imgToCut, "x", xStart:xEnd, "y",yStart:yEnd)
 			saveimg_time = Images.save(img_url,convert(Image,cutImg))
 			image_polsar_path = joinpath(RESOURCE_PATH,"imagem_cortada.png")
-			#old
-			#file_response!(req, image_polsar_path, res)
-			#old
-			#new
-			res.headers = file_headers(img_url)
 			res.status = 200
-			res.data = open(read, img_url)
+			res.data = open(read, image_polsar_path)
+			res.headers = Dict( "Server"     => "Julia/$VERSION",
+							  "Content-Type" => "image/png",
+							  "Date"         => Dates.format(now(Dates.UTC), Dates.RFC1123Format) )
 			return res
-			#new
 		end
 		
 		
 		function generate_image(req::Request,res::Response)
-			#valores via url
+			#params via url
 			url = req.resource
 			query_string_params = url[search(url, '?')+1 : end] #substring indice inicial, final
-			println(query_string_params) 
-			#params in Dict - post in url
 			params::Dict{AbstractString,AbstractString}
 			params = HttpCommon.parsequerystring(query_string_params) #cria Dict com os params separados. ParÂmetros que foram passados pela URL
 			
-			#print params no console de julia
+			#print params
 			for (n, f) in enumerate(params)
 				println(string(n," => ",f))
 			end
 			
-			#pegando parametros
+			#catch params
 			algorithm = get(params, "algorithm", "pauli") #terceiro param é o default value
 			summary_size = get(params, "ssize", nothing)
 			xStart = get(params, "xStart", nothing) 
@@ -141,39 +125,21 @@ type PolsarController
 			yStart = get(params, "yStart", nothing)
 			yEnd = get(params, "yEnd", nothing)
 			
-			#parse to Int	
+			#parse to int	
 			summary_size = try parse(Int, summary_size) end
 			xStart = try parse(Int, xStart) end
 			xEnd = try parse(Int, xEnd) end
 			yStart = try parse(Int, yStart) end
-			yEnd = try parse(Int, yEnd) end
+			yEnd = try parse(Int, yEnd) end	
 			
-			println(algorithm)
-			println(summary_size)
-			println(xStart)
-			println(xEnd)
-			println(yStart)
-			println(yEnd)
-
-			#xStart = parse(Int, split(req.resource,'/')[3])
-			#xEnd = parse(Int,split(req.resource,'/')[4])
-			#yStart = parse(Int, split(req.resource,'/')[5])
-			#yEnd = parse(Int, split(req.resource,'/')[6])
-			
-						
-			println(string(req.resource))
-			
-			
-			#cortar imagem
+			#cut image
 			println("Cortando imagem...")
 			img_url = joinpath(RESOURCE_PATH,"imagem_cortada.png")
-			imgToCut = load(joinpath(RESOURCE_PATH,"img.png"))
-			cuttedImg = subim(imgToCut, "x", xStart:xEnd, "y",yStart:yEnd)
+			img_to_cut = load(joinpath(RESOURCE_PATH,"img.png"))
+			cuttedImg = subim(img_to_cut, "x", xStart:xEnd, "y",yStart:yEnd)
 			
-
-			
-			#aplicar algoritmo na imagem cortada
-			println("Aplicando algoritmo...")
+			#process algorithm in cutted image
+			println(string("Applying algorithm ","[",algorithm,"] ..."))
 			if algorithm == "pointdetector"
 				cuttedImg = ImageService().pointDetector(cuttedImg)
 			elseif algorithm == "pauli"
@@ -189,7 +155,8 @@ type PolsarController
 			elseif algorithm == "erode"
 				cuttedImg = ImageService().erode(cuttedImg)
 			elseif algorithm == "bilinear_interpolation"
-				cuttedImg = ImageService().bilinear_interpolation(cuttedImg, 4.5, 5.5)
+				#not working
+				#cuttedImg = ImageService().bilinear_interpolation(cuttedImg, 4.5, 5.5)
 			elseif algorithm == "morpholaplace"
 				cuttedImg = ImageService().morpholaplace(cuttedImg)
 			elseif algorithm == "morphogradient"
@@ -203,44 +170,29 @@ type PolsarController
 			elseif algorithm == "saltpeppernoise"
 				cuttedImg = ImageService().SaltPepperNoise(cuttedImg)
 			end
-			
-			
-			
-			
-			
-			#salvar imagem cortada, já com algoritmo aplicado
-			println("Salvando imagem processada...")
-			saveimg_time = Images.save(img_url,convert(Image,cuttedImg)) #salvando img em img_url
-
 						
-						
-			#old
-			#file_response!(req, image_polsar_path, res)
-			#old
+			#save processed image
+			println("Saving processed image...")
+			saveimg_time = Images.save(img_url,convert(Image,cuttedImg)) #saving in img_url
 		
-			#new
-			res.headers = file_headers(img_url)
+			#response
 			res.status = 200
 			res.data = open(read, img_url)
+			res.headers = Dict( "Server"     => "Julia/$VERSION",
+							  "Content-Type" => "image/png",
+							  "Date"         => Dates.format(now(Dates.UTC), Dates.RFC1123Format) )
+						
 			return res
-			#new
-			
+
 		end
 		
-		
-		function return_img()
-			image_polsar_path = joinpath(RESOURCE_PATH,"imagem_cortada.png")
-			file_response!(req, image_polsar_path, res)
-		end
-		
-		
-		
+
 		#set methods
 		this.index = index		
-		this.image = image
-		this.img_cut = img_cut
-		this.return_img = return_img
+		this.main_image = main_image
 		this.generate_image = generate_image
+		this.img_cut = img_cut
+
 		
 		return this
 		

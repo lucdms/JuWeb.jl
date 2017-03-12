@@ -37,11 +37,11 @@ type ImageService
 		this = new()
 		
 		function espVert()
-			
+			#TODO
 		end
 		
 		function espHor()
-			
+			#TODO
 		end
 	
 		function tomCinza(img)
@@ -51,19 +51,19 @@ type ImageService
 		end	
 	
 		function brilho()
-			
+			#TODO
 		end
 	
 		function contraste(img)
-
+			#TODO
 		end	
 	
 		function negativo()
-			
+			#TODO
 		end	
 	
 		function quantizar()
-			
+			#TODO
 		end
 		
 		function blur(img)
@@ -306,7 +306,7 @@ type ImageService
 		end
 		
 		
-	
+		#methods
 		this.espVert = espVert
 		this.espHor = espHor
 		this.tomCinza = tomCinza

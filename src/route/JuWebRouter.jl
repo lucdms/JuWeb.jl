@@ -16,6 +16,10 @@ using URIParser
 using HttpServer
 import HttpServer.mimetypes
 
+include(joinpath(VIEW_PATH,"View.jl"))
+
+
+export JuWebRouter
 
 type JuWebRouter
 
@@ -24,46 +28,33 @@ type JuWebRouter
 	
 	#methods
 	register_controller::Function
-	get_method::Function
-	default_controller::Function
+	callback::Function
+
 	
 	function JuWebRouter()
 	
 		this = new()
 		this.routes = Dict()
-	
-	
+		
 		#mapeia as rotas dos serviços web
 		function register_controller(method::Any, url::Any, controller::Function)
 			if haskey(this.routes, url)
-				println("Ja existe uma rota com este nome! Tente adicionar outra url.\n")	
+				print_with_color(:red,string("Ja existe uma rota com este nome! Tente adicionar outra url.\n\n"))
 			else
-				#println("register_controller()")
 				this.routes[url] = controller 
-				println(string("Mapped ""{[$url],methods=[$method],controller=[$controller]}"""))
+				print_with_color(:white,string("Mapped ""{[$url],methods=[$method],controller=[$controller]}\n"""))
 			end
 		end
+
 		
-		
-		
-		function resolve(url) #TODO avaliar via isMatch (REGEX)
-			println("resolve(url)")
-			println(keys(this.routes))
-			if haskey(this.routes,url)#callback
-				return this.routes[url]
-			end
-			return this.default_controller #caso não tenha call, default method
-		end
-		
-		
-		
-		function get_method(req::Request, res::Response) # faz o que a resolve() se propôs a fazer
+		function callback(req::Request, res::Response)
 			url = req.resource
 			println("Acessing Route! Interface with controllers, finding route...")
 			#analisar se é arquivo/resource do server
 			#println(string("Analisar se a rota: ",url," é um arquivo do servidor..."))
 			if is_static_file(url)
-				println("A rota eh um arquivo no servidor...")
+				print("A rota eh um arquivo no servidor: ")
+				print_with_color(:green,string(url,"\n"))
 				return serve_static_file(req::Request, res::Response)
 			else
 				println("A rota nao eh um arquivo no servidor...")
@@ -72,48 +63,29 @@ type JuWebRouter
 			#a regex correta, como exemplo: ismatch(Regex("/image/([0-9])/([0-9])/([0-9])\$"), "/image/1/1/2")		
 			#http://docs.julialang.org/en/release-0.5/manual/strings/
 			#for para buscar rota, aplicando regras de regex (expressões regulares)
-			for regex_url in get_keys()
-				#println(string("url_digitada=",url))
-				#println(string("Regex(string(regex_url))=",string(regex_url,"\\$")))
-				#rgx=replace(regex_url, "\\", "\\\\") 	
-				#rgx = string(regex_url,"\$") #adequação com regex de julia	
-				#println(r)
-				#println(url)
-				if ismatch(Regex(regex_url), url)
-					println(string("Rota encontrada para a URL ",url," que invoca o metodo de nome ",this.routes[regex_url]))
+			for regex_url in collect(keys(this.routes)) #retorna os índices da Dict de rotas
+				if ismatch(Regex(regex_url), url)	
+					#println(string("Rota encontrada para a URL ",url," que invoca o metodo de nome ",this.routes[regex_url]))
+					print("Rota encontrada para a URL ")
+					print_with_color(:green,string(url," "))
+					print("que invoca o metodo de nome ")
+					print_with_color(:green,string(this.routes[regex_url],"\n"))			
 					return this.routes[regex_url](req,res) #call function of controller
 				end
 			end
 			println(string("Nao existe nenhuma rota denominada: ",url))
-			return this.default_controller()
+			return controller_not_found() #caso não tenha call, default method
 		end
-		
-
-		
-		#teste
-		function route(params...; with::Dict = Dict{Any,Any}(), named = :id)
-		  extra_params = Dict(:with => with)
-		  #named = named == :__anonymous_route ? route_name(params) : named
-		  println(params)
-		  println(named)
-		  println(extra_params)
-		end
-		
-		
-		
-		function get_keys()
-			#retorna os índices da Dict de rotas|
-			#println("get_keys()")
-			return collect(keys(this.routes))
-		end			
 			
 			
 		
-		function default_controller()
-			println("default_controller()")
+		function controller_not_found()
+			println("controller_not_found()")
 			res = Response()
 			res.status = 404
-			res.data   = "Requested resource not found"
+			println("Rendering 404 page")
+			not_found_view = View("404.html")
+			res.data = not_found_view.render() #rendering a view
 			return res
 		end
 		
@@ -144,31 +116,33 @@ type JuWebRouter
 		
 		
 		
-		file_extension(f) = ormatch(match(r"(?<=\.)[^\.\\/]*$", f), "")
-		file_headers(f) = Dict{AbstractString, AbstractString}("Content-Type" => get(mimetypes, file_extension(f), "application/octet-stream"))
-
-		ormatch(r::RegexMatch, x) = r.match
-		ormatch(r::Void, x) = x
+		#Response.headers utils
+		
+		function ormatch(r::RegexMatch, x)
+		  return r.match
+		end
+		
+		function ormatch(r::Void, x)
+		  return x
+		end
+		
+		function file_extension(f) 
+		  ormatch(match(r"(?<=\.)[^\.\\/]*$", f), "")
+		end
+		
+		function file_headers(f)
+		  Dict{AbstractString, AbstractString}("Content-Type" => get(mimetypes, file_extension(f), "application/octet-stream"))
+		end
+	
 		
 		
-		#setting obj methods
 		this.register_controller = register_controller
-		this.default_controller = default_controller
-		this.get_method = get_method
+		this.callback = callback
+		
 		
 		return this
 	
 	end
 	
-
-
 end
-
-
-# R O U T E R _ I N S T A N C E 
-export router
-router = JuWebRouter()
-
-
-
 

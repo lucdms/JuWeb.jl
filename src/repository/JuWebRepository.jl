@@ -1,4 +1,4 @@
-module Repository
+module JuWebRepository
 
 #using DBI
 using SQLite

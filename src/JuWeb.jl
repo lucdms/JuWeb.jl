@@ -1,6 +1,6 @@
-# ======================== #
-#   JuWebApp+JuWebServer   #
-# ======================== #
+# ============== #
+#   JuWeb v1.0   #
+# ============== #
 
 module JuWeb
 
@@ -54,23 +54,23 @@ dlimages()
 
 
 
-include("JuWebApp.jl")
-include("JuWebServer.jl")
-include("utils/http_utils.jl") #utils
-#include("repo/Repository.jl") #repository, daos
+
+include("JuWebApp.jl") #app
+include("JuWebServer.jl") #server
+include("utils/http_utils.jl") #http util
+include("route/JuWebRouter.jl") #roteador
+include("route/JuWebRouteMapper.jl") #map das rotas
 
 
-#rotas
-include("route/JuWebRouter.jl")
-include("route/routes.jl")
-
-
-
-
-#start http
-app = JuWebApp()
+router = JuWebRouter()
+rmapper = JuWebRouteMapper(router)
+rmapper.map_routes()
+app = JuWebApp() #start http
 server = JuWebServer(app,"localhost",8000)
+println(server.info())
 server.run()
+
+
 
 
 end #module

@@ -52,18 +52,22 @@ angular.module('appController').controller('indexController', function($scope){
 
             }
 
-            var httpRequest;
-
-            httpRequest = new XMLHttpRequest();
+            var httpRequest = new XMLHttpRequest();
 
 			//old
             //httpRequest.open('GET', 'http://localhost:8000/imgCut/' + xStart + '/' + xEnd + '/' + yStart + '/' + yEnd,true);
             
 			//new
-			httpRequest.open('GET', 'http://localhost:8000/image/services/generateImage?algorithm=' + $scope.selectedAlgorithm + '&ssize=' + $scope.summarySize + '&xStart=' + xStart + '&xEnd=' + xEnd + '&yStart=' + yStart + '&yEnd=' + yEnd, true);
-			httpRequest.send();
+			//httpRequest.open('GET', 'http://localhost:8000/polsar/services/generateImage?algorithm=' + $scope.selectedAlgorithm + '&ssize=' + $scope.summarySize + '&xStart=' + xStart + '&xEnd=' + xEnd + '&yStart=' + yStart + '&yEnd=' + yEnd, true);
+			//httpRequest.send();
 			
-			
+						
+			var outputImg = new Image($scope.summarySize,$scope.summarySize);
+			outputImg.src = 'http://localhost:8000/polsar/services/generateImage?algorithm=' + $scope.selectedAlgorithm + '&ssize=' + $scope.summarySize + '&xStart=' + xStart + '&xEnd=' + xEnd + '&yStart=' + yStart + '&yEnd=' + yEnd;
+			$scope.DrawImageCutInCanvas(outputImg);
+				
+
+			/*
             httpRequest.onreadystatechange = alertContents = function alertContents() {
                 if (httpRequest.readyState === 4) {
                     if (httpRequest.status === 200) {
@@ -81,7 +85,7 @@ angular.module('appController').controller('indexController', function($scope){
 						
 						
 						//new
-						outputImg.src = 'http://localhost:8000/image/services/generateImage?algorithm=' + $scope.selectedAlgorithm + '&ssize=' + $scope.summarySize + '&xStart=' + xStart + '&xEnd=' + xEnd + '&yStart=' + yStart + '&yEnd=' + yEnd;
+						outputImg.src = 'http://localhost:8000/polsar/services/generateImage?algorithm=' + $scope.selectedAlgorithm + '&ssize=' + $scope.summarySize + '&xStart=' + xStart + '&xEnd=' + xEnd + '&yStart=' + yStart + '&yEnd=' + yEnd;
 						
 						
 						$scope.DrawImageCutInCanvas(outputImg);
@@ -91,6 +95,7 @@ angular.module('appController').controller('indexController', function($scope){
                     }
                 }
             };
+			*/
             //httpRequest.open('GET', 'http://localhost:8000/imgCut/' + xStart + '/' + xEnd + '/' + yStart + '/' + yEnd,true);
             //httpRequest.send();
         }

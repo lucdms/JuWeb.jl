@@ -1,9 +1,8 @@
 # Contents: Functions not specific to the current app.
 
-#using HttpServer
 
 ################################################################################
-### Generic handlers
+### RESPONSE
 ################################################################################
 function notfound!(req, res)
     # Modifies response to not found status
@@ -19,3 +18,37 @@ function file_response!(req, filename, res)
     res.headers  = res2.headers
     res.data     = res2.data
 end
+
+
+function serve_static_file(req::Request, res::Response)
+  f = file_path(req.resource)
+  res.status = 200
+  res.headers = file_headers(f)
+  res.data = open(read, f)
+  return res
+end
+
+
+################################################################################
+### RESPONSE FILE HEADERS
+################################################################################
+
+function file_headers(f)
+  Dict{AbstractString, AbstractString}("Content-Type" => get(mimetypes, file_extension(f), "application/octet-stream"))
+end
+
+function file_extension(f) 
+  ormatch(match(r"(?<=\.)[^\.\\/]*$", f), "")
+end	
+
+function ormatch(r::RegexMatch, x)
+  return r.match
+end
+
+function ormatch(r::Void, x)
+  return x
+end
+
+
+
+

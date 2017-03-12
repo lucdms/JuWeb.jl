@@ -6,33 +6,32 @@ using SQLite
 
 include("../config/constants.jl") #constants
 
-
-include(joinpath(REPOSITORY_PATH,"Repository.jl"))
-include(joinpath(MODEL_PATH,"TrackModel.jl"))
 include("AbstractDAO.jl")
+include(joinpath(REPOSITORY_PATH,"JuWebRepository.jl"))
+include(joinpath(MODEL_PATH,"TrackModel.jl"))
 
 
 type TrackDAO <: AbstractDAO
 
-	insert::Function
+	create::Function
 	select::Function
-	alter::Function
+	update::Function
 	delete::Function
-	list_all::Function
+	list::Function
 	count::Function
 	
 	function TrackDAO()
 	
 		this = new()
 		
-		function insert()
-			println("insert()")
+		function create()
+			println("create()")
 		end
 		
-		function select(id::Int)
+		function select(id)
 			println("TrackDAO.select(id)")
 			
-			bd = Repository.get_db()
+			bd = JuWebRepository.get_db()
 			sql = string("SELECT * FROM tracks where TrackId=",id)
 			query = SQLite.query(bd, sql)
 		
@@ -78,25 +77,25 @@ type TrackDAO <: AbstractDAO
 			
 		end
 		
-		function alter(id::Int)
-			println("alter()")
+		function update(t::TrackModel)
+			println("TODO: update()")
 		end
 		
-		function delete()
-			println("delete()")
+		function delete(id)
+			println("TODO: delete()")
 		end
 		
-		function list_all()
-			println("Acessing TrackDAO! Interface with databases / repositories.  list_all()")
+		function list()
+			println("Acessing TrackDAO! Interface with databases / repositories.  list()")
 			
-			bd = Repository.get_db()
+			bd = JuWebRepository.get_db()
 			sql = "SELECT * FROM tracks"
 			query = SQLite.query(bd, sql)
 			
 			#list
 			list = TrackModel[]
 			
-			println("oi")
+			println("list")
 			
 			for i = 1:size(query)[1]
 		   
@@ -144,33 +143,25 @@ type TrackDAO <: AbstractDAO
 			   
 			end
 			
-			println("eita")
+			println("size(list)")
 			println(size(list))
 			
 			return list	
 		end
 		
 		function count()
-			bd = Repository.get_db()
+			bd = JuWebRepository.get_db()
 			sql = "SELECT count(*) FROM tracks"
 			count = SQLite.query(bd, sql)
-			
 			println(size(count))
-
 			return size(count)
-			
-			#db = SQLiteDB("quotes.db")
-			#res = query(db,"select count(*) from quotes");
-			#size(res)
-			#res[1][1]; # => 36
-			
 		end
 	
-		this.insert=insert
+		this.create=create
 		this.select=select
-		this.alter=alter
+		this.update=update
 		this.delete=delete
-		this.list_all=list_all
+		this.list=list
 		this.count=count
 	
 		return this
