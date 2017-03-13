@@ -58,6 +58,7 @@ NOTE: Any compatibility issues, or exceptions, remove the folders from the Julia
 For users:
 ```julia
 Pkg.clone("https://github.com/lucdms/JuWeb.jl.git")
+push!(LOAD_PATH, Base.LOAD_CACHE_PATH[1])
 using JuWeb
 ```
 
