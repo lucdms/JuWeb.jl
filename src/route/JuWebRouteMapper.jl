@@ -5,9 +5,9 @@
 
 #controllers
 include("../controller/TrackController.jl")
-include("../controller/PolsarController.jl") #controler
-include("../controller/HomeController.jl") #controler
-
+include("../controller/PolsarController.jl") #controller
+include("../controller/HomeController.jl") #controller
+include("../controller/LoginController.jl") #controller
 
 #ROTAS: regex_url -> method
 
@@ -37,7 +37,8 @@ type JuWebRouteMapper
 			track_controller = TrackController()
 			polsar_controller = PolsarController()
 			home_controller = HomeController()
-					
+			login_controller = LoginController()
+	
 		
 			router.register_controller(GET,"^/\$",polsar_controller.index)
 			router.register_controller(GET,"/polsar(\/)?\$",polsar_controller.index)
@@ -49,7 +50,8 @@ type JuWebRouteMapper
 			router.register_controller(GET,"/home\\?([\\w-]+(=[\\w-]*)?(&[\\w-]+(=[\\w-]*)?)*)?\$",home_controller.test_params) #params example
 			router.register_controller(GET,"/post_example(\/)?\$",home_controller.post_example) #post_example
 			router.register_controller(POST,"/post_action(\/)?\$",home_controller.post_action) #action
-			
+			router.register_controller(GET,"/login(\/)?\$",login_controller.login_page) #login_example
+			router.register_controller(POST,"/login_action(\/)?\$",login_controller.login_action) #action
 			#add new routes here...
 			
 			
