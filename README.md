@@ -1,6 +1,4 @@
-![JUWEB LOGO](https://scontent-gru2-1.xx.fbcdn.net/v/t1.0-9/16508576_1264883806922556_9165801245734248889_n.jpg?oh=a1a7d578720ea39064aaf1313fb7dec3&oe=594B3133)
-
-https://drive.google.com/file/d/0ByBvdsbTIBi_WkRSQUxkd3FJOUk/view?usp=sharing
+![JUWEB LOGO](https://i.imgur.com/LleHnt4.png)
 
 # JuWeb v1.0
 
@@ -13,7 +11,7 @@ https://drive.google.com/file/d/0ByBvdsbTIBi_WkRSQUxkd3FJOUk/view?usp=sharing
 ```
 
 
-### Juweb came to facilitate!
+### Came to facilitate!
 
 Juweb is a Web Framework that uses MVC paradigm, whose purpose is the promotion of easy development of modern web applications using tools, modules and methods of the HTTP protocol and the libraries available in the Julia language. Juweb is still in development, and is being implemented for the most part in Julia, which is a high-level, high-performance, dynamic programming language with just-in-time (JIT) compilation.
 
@@ -86,7 +84,7 @@ This is the folder/directory that the images should be:
 
 Follow the image of JuWeb by downloading images automatically:
 
- ![JUWEB DOWN](https://scontent.fmcz3-1.fna.fbcdn.net/v/t1.0-9/16681761_1267442713333332_2627546624307731990_n.jpg?oh=8c9128c838d5790eb2ea9ddac8be6059&oe=59D7A1DD)
+ ![JUWEB DOWN](https://i.imgur.com/y9JUmWW.jpg)
 
 
 ### Then just access:
@@ -152,7 +150,7 @@ type MyController
 		function convert(a::Array{UInt8,1})
 			i = findfirst(a .== 0)
 			if i == 0
-				s = ASCIIString(a)
+			        s = ASCIIString(a)
 			else
 				s = ASCIIString(a[1:i-1])
 			end
@@ -247,9 +245,8 @@ http://localhost:8000/mycontroller/mult
 
 JuWeb Working:
 
-![JUWEB WORKING](https://scontent-gru2-1.xx.fbcdn.net/v/t1.0-9/16682012_1264883960255874_8231054305525312709_n.jpg?oh=46108a8f860e4319ddfb9be27db21067&oe=594BD199)
+![JUWEB WORKING](https://i.imgur.com/iIsD5sT.jpg)
 
-https://drive.google.com/file/d/0ByBvdsbTIBi_UVNqWDFJNGlUWk0/view?usp=sharing
 
 
 Thank you.
