@@ -6,7 +6,7 @@ html, body {
 	height:100%;
 }
 body { 
-	background:url(/images/tail-top.gif) left top repeat-x #140100;
+	background:url(/images/tail-top.gif) left top repeat-x #000;
 	font-family:Georgia, "Times New Roman", Times, serif;
 	font-size:100%; 
 	line-height:1.5em;
